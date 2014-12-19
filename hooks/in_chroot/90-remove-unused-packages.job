@@ -1,0 +1,8 @@
+#!/bin/bash
+# Remove unused packages
+# for zsh
+apt-mark manual zsh
+apt-mark manual zsh-common
+
+apt-get --force-yes -y purge deepin-installer casper
+apt-get --force-yes -y autoremove --purge
