@@ -1,0 +1,21 @@
+#!/bin/bash
+# copy boot.cfg and grub.cfg to sda1 for loongson
+
+. /etc/deepin-installer.conf
+
+if [ -d /cdrom/casper/boot ];then
+    echo "[INFO] Set Boot for Loongson"
+    mkdir -p /loongsonboot
+    mount /dev/sda1 /loongsonboot
+
+    cp -a /cdrom/casper/boot/* /loongsonboot
+    [ -f /loongsonboot/boot/grub.cfg ] && [ -f /loongsonboot/boot.cfg ] || exit 1
+    # fix fstab error
+    sed -i '/boot/d' /target/etc/fstab
+    sed -i '/swap/d' /target/etc/fstab
+
+    sync &&  umount /loongsonboot &&  rmdir /loongsonboot &&  echo "[INFO] Boot for Loongson Pass" || exit 9
+else
+    exit 2
+fi
+
